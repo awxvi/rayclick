@@ -3,4 +3,4 @@ CC_FLAGS = -O2 -Wall -Wno-missing-braces -I include/ -L lib/ -l raylib -l opengl
 CC = g++
 
 all:
-	$(CC) -o clicker $(SRC_FILES) $(CC_FLAGS)
+	$(CC) -o rayclick $(SRC_FILES) $(CC_FLAGS)
