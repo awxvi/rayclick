@@ -20,7 +20,7 @@
 
 <br>
 
-It is **STRONGLY** Recommened you use [w64DevKit](https://github.com/skeeto/w64devkit). 
+It is **STRONGLY** recommened you use [w64DevKit](https://github.com/skeeto/w64devkit). 
 
 <br>
 
