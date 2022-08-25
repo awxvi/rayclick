@@ -227,7 +227,7 @@ void initialize() {
 
 int main( void ) {
     
-    SetTargetFPS(100); // nice.
+    SetTargetFPS(100);
 
     initialize();
     
