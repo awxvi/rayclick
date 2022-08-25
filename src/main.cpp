@@ -3,7 +3,20 @@
 #include <iostream>
 #include <fstream>
 
+// TODO: make saving and loading also load the auto-incrementors
+
 int count = 0;
+
+int auto_incrementor_count = 0;
+
+// ips = increment per second, this is the value of one incrementor.
+const int auto_incrementor_ips = 10;
+
+// natural incrementaion - is increased when auto_incrementors are purchased.
+int nat_inc = 0;
+
+// for the autoincrementor
+int frame_count = 0;
 
 typedef struct {
 
@@ -23,6 +36,10 @@ typedef enum {
 } STATE;
 
 STATE currentState = STATE::MENU;
+
+void inc_naturally() {
+    count += nat_inc;
+}
 
 void saveCountValue(int countValue) {
 
@@ -82,16 +99,36 @@ void inGame() {
     increment_button.ypos = ( ( float ) GetScreenHeight() / 2 ) / 4;
     increment_button.rect = { increment_button.xpos, increment_button.ypos, 100, 100};
 
+    BUTTON basic_incrementor;
+
+    basic_incrementor.color = GRAY;
+    basic_incrementor.xpos = ( ( float ) GetScreenWidth() / 2) - 300;
+    basic_incrementor.ypos = ( ( float ) GetScreenHeight() / 2) / 4;
+    basic_incrementor.rect = { basic_incrementor.xpos, basic_incrementor.ypos, 75, 75 };
+
     DrawRectangleRec( increment_button.rect, increment_button.color );
+
+    DrawRectangleRec( basic_incrementor.rect, basic_incrementor.color );
 
     DrawText ( TextFormat("%i", count), GetScreenWidth() / 2, 125, 25, BLACK );
     DrawText ( "Press CTRL + S to save your points value.", 250, 250, 25, BLACK );
     DrawText ( "Press CTRL + L to load your saved points value.", 250, 275, 25, BLACK );
 
     // Clicking mechanics
-    if (CheckCollisionPointRec( GetMousePosition(), increment_button.rect ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) ) {
-        std::cout << "BUTTON PRESSED. COUNT IS NOW: " << count << "\n";
+    if ( CheckCollisionPointRec( GetMousePosition(), increment_button.rect ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) ) {
+        std::cout << "BUTTON PRESSED. COUNT IS NOW: " << count + 1 << "\n";
         count++;
+    }
+
+    // purchasing mechanic
+    if ( CheckCollisionPointRec( GetMousePosition(), basic_incrementor.rect ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) ) {
+        if ( count >= 100 ) {
+            auto_incrementor_count++;
+            nat_inc += auto_incrementor_ips;
+            count -= 100;
+            std::cout << "auto_incrementor_count INCREASED BY ONE, THE COUNT IS NOW: " << auto_incrementor_count << "\n\n";
+            std::cout << "nat_inc IS NOW: " << nat_inc << "\n\n";
+        }   
     }
 
     if ( IsKeyDown( KEY_LEFT_CONTROL ) && IsKeyPressed( KEY_S ) ) {
@@ -112,6 +149,12 @@ void inGame() {
         currentState = STATE::EXITCONFORMATION;
     }
 
+    if( frame_count >= 100 ) {
+        inc_naturally();
+        frame_count = 0;
+    }
+
+    frame_count++;
 }
 
 void paused() {
@@ -184,7 +227,7 @@ void initialize() {
 
 int main( void ) {
     
-    SetTargetFPS(69420); // nice.
+    SetTargetFPS(100); // nice.
 
     initialize();
     
