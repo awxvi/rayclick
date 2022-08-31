@@ -2,7 +2,7 @@
 
 <ul>
     <li>
-        Upgrades: such as an auto-incrementer.
+        Clean up code base.
     </li>
     <li>
         Settings menu.

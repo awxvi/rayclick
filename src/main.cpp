@@ -71,6 +71,34 @@ int getCountValue(std::string filename){
 
 }
 
+// AuI = autoincrement count
+void saveAuICount( int aic ) {
+    std::ofstream out_file( "aicfile" );
+    out_file << aic;
+    out_file.close();
+}
+
+int getAuICount( std::string filename ) {
+    
+    int final_num = 0;
+    
+    std::ifstream out_file;
+    out_file.open( filename );
+
+    if( !( out_file.is_open() ) ) {
+        std::cout << "ERROR: COULDN\'T OPEN FILE TO READ. EXITING.";
+        return 1;
+    }   
+
+    while ( out_file >> final_num ) {
+        std::cout << " AuIC READING: " << final_num << "\n";
+    }
+
+    out_file.close();
+
+    return final_num;
+}
+
 void inMenu(){
 
     ClearBackground(LIGHTGRAY);
@@ -133,12 +161,14 @@ void inGame() {
 
     if ( IsKeyDown( KEY_LEFT_CONTROL ) && IsKeyPressed( KEY_S ) ) {
         std::cout << "\n\n" << "KEY_LEFT_CONTROL && KEY_S DETECTED." << "\n\n";
-        saveCountValue(count);
+        saveCountValue( count );
+        saveAuICount( auto_incrementor_count );
     }
 
     if ( IsKeyDown( KEY_LEFT_CONTROL ) && IsKeyPressed( KEY_L ) ) {
         std::cout << "\n\n" << "KEY_LEFT_CONTROL && KEY_L DETECTED." << "\n\n";
         count = getCountValue( "countfile" );
+        nat_inc = auto_incrementor_ips * getAuICount( "aicfile" );
     }
 
     if( IsKeyPressed ( KEY_P ) ) {
